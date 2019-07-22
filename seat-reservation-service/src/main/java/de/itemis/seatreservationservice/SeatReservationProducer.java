@@ -14,6 +14,7 @@ public class SeatReservationProducer {
     }
 
     public void send(final String trainId) {
-        jmsTemplate.convertAndSend(QUEUE_NAME, trainId, new ReplyToProcessor());
+
+        jmsTemplate.convertAndSend(QUEUE_NAME, new ReservationRequest(trainId), new ReplyToProcessor());
     }
 }

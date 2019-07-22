@@ -1,6 +1,9 @@
 package de.itemis.seatreservationservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.junit.runner.Request;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,8 +26,11 @@ public class ProducerIntegrationTest {
     @Autowired
     private JmsTemplate jmsTemplate;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     @Test
-    public void shouldSendMessageToCorrectQueue() throws JMSException {
+    public void shouldSendMessageToCorrectQueue() throws JMSException, JsonProcessingException {
         String trainId = "12";
         producer.send(trainId);
 
@@ -32,9 +38,11 @@ public class ProducerIntegrationTest {
         Message message = jmsTemplate.receive("seatReservation");
         TextMessage textMessage = (TextMessage) message;
 
-        assertThat(textMessage.getText()).isEqualTo(trainId);
+        assertThat(textMessage.getText()).isEqualTo(getRequestAsJson(trainId));
     }
 
-
-
+    private String getRequestAsJson(final String trainId) throws JsonProcessingException {
+        ReservationRequest reservationRequest = new ReservationRequest(trainId);
+        return mapper.writeValueAsString(reservationRequest);
+    }
 }
