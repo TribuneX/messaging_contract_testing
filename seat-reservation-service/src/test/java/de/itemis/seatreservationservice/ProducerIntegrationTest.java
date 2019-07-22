@@ -23,12 +23,12 @@ public class ProducerIntegrationTest {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-
     @Test
     public void shouldSendMessageToCorrectQueue() throws JMSException {
         String trainId = "12";
         producer.send(trainId);
 
+        jmsTemplate.setReceiveTimeout(1000);
         Message message = jmsTemplate.receive("seatReservation");
         TextMessage textMessage = (TextMessage) message;
 
