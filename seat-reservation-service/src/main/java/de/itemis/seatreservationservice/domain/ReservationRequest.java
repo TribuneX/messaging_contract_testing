@@ -1,4 +1,4 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatreservationservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class ReservationRequest {
 
     private String trainId;
+    private String id;
 
 }

@@ -1,5 +1,6 @@
 package de.itemis.seatreservationservice;
 
+import de.itemis.seatreservationservice.domain.ReservationRequest;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,9 @@ public class SeatReservationProducer {
     }
 
     public void send(final String trainId) {
+        ReservationRequest request = new ReservationRequest();
+        request.setTrainId(trainId);
 
-        jmsTemplate.convertAndSend(QUEUE_NAME, new ReservationRequest(trainId), new ReplyToProcessor());
+        jmsTemplate.convertAndSend(QUEUE_NAME, request, new ReplyToProcessor());
     }
 }
