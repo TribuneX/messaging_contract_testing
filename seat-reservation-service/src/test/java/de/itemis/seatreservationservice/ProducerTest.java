@@ -3,9 +3,9 @@ package de.itemis.seatreservationservice;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessagePostProcessor;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class ProducerTest {
 
@@ -23,6 +23,6 @@ public class ProducerTest {
 
         producer.send(trainId);
 
-        verify(jmsTemplate).convertAndSend("seatReservation", trainId);
+        verify(jmsTemplate,times(1)).convertAndSend(anyString(),any(Object.class),any(MessagePostProcessor.class));
     }
 }

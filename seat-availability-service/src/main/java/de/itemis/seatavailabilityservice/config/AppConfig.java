@@ -1,6 +1,6 @@
-package de.itemis.seatreservationservice.config;
+package de.itemis.seatavailabilityservice.config;
 
-import de.itemis.seatreservationservice.domain.ReservationRequest;
+import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
