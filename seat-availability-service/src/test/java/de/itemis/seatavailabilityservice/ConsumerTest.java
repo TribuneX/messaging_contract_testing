@@ -3,6 +3,7 @@ package de.itemis.seatavailabilityservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,13 +19,15 @@ public class ConsumerTest {
 
     @Mock
     private SeatAvailabilityService seatAvailabilityService;
-    private ObjectMapper mapper = new ObjectMapper();
+
+    @Mock
+    private SeatReservationResponseProducer producer;
 
     @Test
     public void shouldCallSeatAvailabilityCheckerOnRecievedRequest() throws IOException {
         String trainId = "12";
         ReservationRequest reservationRequest = createReservationRequest(trainId);
-        SeatReservationConsumer consumer = new SeatReservationConsumer(mapper, seatAvailabilityService);
+        SeatReservationConsumer consumer = new SeatReservationConsumer(seatAvailabilityService, producer);
 
         consumer.receiveMessage(reservationRequest);
 

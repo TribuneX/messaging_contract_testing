@@ -1,7 +1,7 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatavailabilityservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.itemis.seatreservationservice.domain.ReservationRequest;
+import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +12,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
-
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProducerIntegrationTest {
+public class ResponseProducerIntegrationTest {
 
     @Autowired
-    private SeatReservationProducer producer;
+    private SeatReservationResponseProducer producer;
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -33,14 +32,15 @@ public class ProducerIntegrationTest {
     @Test
     public void shouldSendMessageWithTrainId() throws JMSException, IOException {
         String trainId = "12";
-        producer.send(trainId);
+        int availableSeats = 3;
+        producer.send(trainId, availableSeats);
 
         jmsTemplate.setReceiveTimeout(1000);
-        Message message = jmsTemplate.receive("seatReservation");
+        Message message = jmsTemplate.receive("seatAvailability");
         TextMessage textMessage = (TextMessage) message;
 
-        ReservationRequest request = mapper.readValue(textMessage.getText(), ReservationRequest.class);
-        assertThat(request.getTrainId()).isEqualTo(trainId);
+        AvailabilityResponse response = mapper.readValue(textMessage.getText(), AvailabilityResponse.class);
+        assertThat(response.getTrainId()).isEqualTo(trainId);
+        assertThat(response.getAvailableSeats()).isEqualTo(availableSeats);
     }
 }
-

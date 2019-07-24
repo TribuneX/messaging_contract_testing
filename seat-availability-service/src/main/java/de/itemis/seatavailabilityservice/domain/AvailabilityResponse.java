@@ -1,14 +1,15 @@
-package de.itemis.seatreservationservice.domain;
+package de.itemis.seatavailabilityservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ReservationRequest {
+@AllArgsConstructor
+public class AvailabilityResponse {
 
     private String trainId;
+    private int availableSeats;
 
 }

@@ -10,13 +10,14 @@ import java.util.concurrent.CountDownLatch;
 @Component
 public class SeatReservationConsumer {
 
-    private ObjectMapper mapper;
     private SeatAvailabilityService availabilityService;
     private CountDownLatch testCountDownLatch;
 
-    public SeatReservationConsumer(ObjectMapper mapper, SeatAvailabilityService availabilityService) {
-        this.mapper = mapper;
+    private SeatReservationResponseProducer producer;
+
+    public SeatReservationConsumer(SeatAvailabilityService availabilityService, SeatReservationResponseProducer producer) {
         this.availabilityService = availabilityService;
+        this.producer = producer;
     }
 
     public void setTestCountDownLatch(CountDownLatch testCountDownLatch){
@@ -25,7 +26,13 @@ public class SeatReservationConsumer {
 
     @JmsListener(destination = "seatReservation")
     public void receiveMessage(ReservationRequest request) {
-        availabilityService.getFreeSeats(request.getTrainId());
+        String trainId = request.getTrainId();
+        triggerCountdownLatch();
+        int freeSeats = availabilityService.getFreeSeats(trainId);
+        producer.send(trainId, freeSeats);
+    }
+
+    private void triggerCountdownLatch() {
         if(testCountDownLatch != null) {
             testCountDownLatch.countDown();
         }

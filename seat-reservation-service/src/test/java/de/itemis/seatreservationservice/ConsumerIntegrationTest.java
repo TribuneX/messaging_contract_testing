@@ -1,6 +1,6 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatreservationservice;
 
-import de.itemis.seatavailabilityservice.domain.ReservationRequest;
+import de.itemis.seatreservationservice.domain.AvailabilityResponse;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,27 +27,26 @@ public class ConsumerIntegrationTest {
     private JmsTemplate jmsTemplate;
 
     @Autowired
-    SeatReservationConsumer consumer;
+    SeatAvailabilityConsumer consumer;
 
     @MockBean
-    private SeatAvailabilityService service;
-
-    @MockBean
-    private SeatReservationResponseProducer producer;
+    private PrinterService service;
 
     @Test
     @Ignore
-    public void shouldParseReservationRequest() throws InterruptedException {
+    public void shouldParseAvailabilityResponse() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         consumer.setTestCountDownLatch(countDownLatch);
-        sendTestReservationRequest();
+        AvailabilityResponse response = sendTestAvailabilityResponse();
         countDownLatch.await(5, TimeUnit.SECONDS);
-        verify(service, times(1)).getFreeSeats(trainId);
+        verify(service, times(1)).printResult(eq(response));
     }
 
-    private void sendTestReservationRequest() {
-        ReservationRequest request = new ReservationRequest();
-        request.setTrainId(trainId);
-        jmsTemplate.convertAndSend("seatReservation", request);
+    private AvailabilityResponse sendTestAvailabilityResponse() {
+        AvailabilityResponse response = new AvailabilityResponse();
+        response.setTrainId(trainId);
+        response.setAvailableSeats(3);
+        jmsTemplate.convertAndSend("seatAvailability", response);
+        return response;
     }
 }

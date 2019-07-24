@@ -1,5 +1,6 @@
 package de.itemis.seatavailabilityservice.config;
 
+import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.jms.support.converter.MessageType;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class AppConfig {
 
     @Bean
@@ -18,7 +19,7 @@ public class AppConfig {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
 
         Map<String, Class<?>> typeIdMappings = new HashMap<String, Class<?>>();
-        typeIdMappings.put("JMS_TYPE", ReservationRequest.class);
+        typeIdMappings.put("JMS_TYPE", Object.class);
 
         converter.setTypeIdMappings(typeIdMappings);
         converter.setTargetType(MessageType.TEXT);
