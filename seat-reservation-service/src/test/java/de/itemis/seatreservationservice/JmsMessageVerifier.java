@@ -1,6 +1,7 @@
 package de.itemis.seatreservationservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.itemis.seatreservationservice.domain.ReservationRequest;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
@@ -30,6 +31,7 @@ public class JmsMessageVerifier implements MessageVerifier {
 
     @Override
     public void send(Object message, String destination) {
+        sendRequest();
     }
 
     @Override
@@ -44,7 +46,13 @@ public class JmsMessageVerifier implements MessageVerifier {
 
     @Override
     public void send(Object payload, Map headers, String destination) {
+        sendRequest();
+    }
 
+    private void sendRequest() {
+        ReservationRequest request = new ReservationRequest();
+        request.setTrainId("12");
+        jmsTemplate.convertAndSend(seatReservationRequestQueue, request, new ReplyToProcessor());
     }
 
     private Object receiveMessage() {
