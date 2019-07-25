@@ -1,7 +1,7 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatavailabilityservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.itemis.seatreservationservice.domain.ReservationRequest;
+import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
 import org.springframework.context.annotation.Primary;
