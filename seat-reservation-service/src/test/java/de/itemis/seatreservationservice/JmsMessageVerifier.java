@@ -3,8 +3,8 @@ package de.itemis.seatreservationservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@Qualifier("JmsMessageVerifier")
+@Primary
 public class JmsMessageVerifier implements MessageVerifier {
 
     @Autowired
-    ActiveMQQueue queue;
+    ActiveMQQueue seatReservationRequestQueue;
 
     @Autowired
     JmsTemplate jmsTemplate;
@@ -48,21 +48,13 @@ public class JmsMessageVerifier implements MessageVerifier {
     }
 
     private Object receiveMessage() {
-        Message message = jmsTemplate.receive(queue);
+        Message message = jmsTemplate.receive(seatReservationRequestQueue);
         TextMessage textMessage = (TextMessage) message;
         try {
-            return new GenericMessage<String>(textMessage.getText());
+            return new GenericMessage<>(textMessage.getText());
         } catch (JMSException e) {
             e.printStackTrace();
             return null;
         }
-        /*try {
-            return mapper.readValue(textMessage.getText(), ReservationRequest.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-        return null;*/
     }
 }
