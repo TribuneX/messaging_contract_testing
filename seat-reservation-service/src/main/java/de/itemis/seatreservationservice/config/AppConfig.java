@@ -1,19 +1,17 @@
 package de.itemis.seatreservationservice.config;
 
-import de.itemis.seatreservationservice.domain.ReservationRequest;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.converter.MessageType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-//@Configuration
+@Configuration
 public class AppConfig {
 
-    @Bean
+    @Bean("seatReservation")
+    ActiveMQQueue queue() {
+        return new ActiveMQQueue("seatReservation");
+    }
+    /*@Bean
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
 
@@ -25,5 +23,5 @@ public class AppConfig {
         converter.setTypeIdPropertyName("JMS_TYPE");
 
         return converter;
-    }
+    }*/
 }

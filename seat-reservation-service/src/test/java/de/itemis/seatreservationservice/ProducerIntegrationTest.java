@@ -2,6 +2,7 @@ package de.itemis.seatreservationservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatreservationservice.domain.ReservationRequest;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
-
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,6 +28,9 @@ public class ProducerIntegrationTest {
     private JmsTemplate jmsTemplate;
 
     @Autowired
+    ActiveMQQueue queue;
+
+    @Autowired
     private ObjectMapper mapper;
 
     @Test
@@ -36,7 +39,7 @@ public class ProducerIntegrationTest {
         producer.send(trainId);
 
         jmsTemplate.setReceiveTimeout(1000);
-        Message message = jmsTemplate.receive("seatReservation");
+        Message message = jmsTemplate.receive(queue);
         TextMessage textMessage = (TextMessage) message;
 
         ReservationRequest request = mapper.readValue(textMessage.getText(), ReservationRequest.class);

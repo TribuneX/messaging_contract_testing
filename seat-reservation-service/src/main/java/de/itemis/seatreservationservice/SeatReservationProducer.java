@@ -1,6 +1,8 @@
 package de.itemis.seatreservationservice;
 
 import de.itemis.seatreservationservice.domain.ReservationRequest;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Component;
 public class SeatReservationProducer {
 
     private JmsTemplate jmsTemplate;
-    private static String QUEUE_NAME = "seatReservation";
+
+    @Autowired
+    ActiveMQQueue queue;
 
     public SeatReservationProducer(final JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
@@ -18,6 +22,6 @@ public class SeatReservationProducer {
         ReservationRequest request = new ReservationRequest();
         request.setTrainId(trainId);
 
-        jmsTemplate.convertAndSend(QUEUE_NAME, request, new ReplyToProcessor());
+        jmsTemplate.convertAndSend(queue, request, new ReplyToProcessor());
     }
 }

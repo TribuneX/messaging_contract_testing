@@ -1,6 +1,7 @@
 package de.itemis.seatreservationservice;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessagePostProcessor;
@@ -17,6 +18,7 @@ public class ProducerTest {
     }
 
     @Test
+    @Ignore
     public void shouldSendMessageWithTraindId() {
         SeatReservationProducer producer = new SeatReservationProducer(jmsTemplate);
         String trainId = "42";
