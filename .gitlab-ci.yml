@@ -1,0 +1,20 @@
+stages:
+  - build-reservation
+  - build-availability
+
+cache:
+  paths:
+    - .m2/repository
+
+
+verify:reservation:
+  stage: build-reservation
+  script:
+    - cd seat-reservation-service
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository verify
+
+verify:availability:
+  stage: build-availability
+  script:
+    - cd seat-availability-service
+    - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository verify
