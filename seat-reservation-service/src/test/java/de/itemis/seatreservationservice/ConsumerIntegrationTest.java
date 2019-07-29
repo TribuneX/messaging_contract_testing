@@ -33,7 +33,6 @@ public class ConsumerIntegrationTest {
     private PrinterService service;
 
     @Test
-    @Ignore
     public void shouldParseAvailabilityResponse() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         consumer.setTestCountDownLatch(countDownLatch);
