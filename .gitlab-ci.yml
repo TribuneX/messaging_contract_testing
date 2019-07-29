@@ -2,19 +2,24 @@ stages:
   - build-reservation
   - build-availability
 
+image: maven:3-jdk-13-alpine
+
 cache:
   paths:
     - .m2/repository
-
 
 verify:reservation:
   stage: build-reservation
   script:
     - cd seat-reservation-service
     - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository verify
+  tags:
+    - docker
 
 verify:availability:
   stage: build-availability
   script:
     - cd seat-availability-service
     - mvn -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository verify
+  tags:
+    - docker
