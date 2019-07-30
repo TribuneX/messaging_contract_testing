@@ -1,4 +1,5 @@
 package contracts
+
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
@@ -18,10 +19,8 @@ Test
         sentTo 'seatReservation'
         // the body of the output message
         body(
-                trainId: '12'
+                trainId: '12',
+                requestId: $(nonEmpty())
         )
-        /*headers {
-            messagingContentType(applicationJson())
-        }*/
     }
 }

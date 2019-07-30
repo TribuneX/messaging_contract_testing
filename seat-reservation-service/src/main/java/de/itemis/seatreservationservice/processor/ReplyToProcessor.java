@@ -1,4 +1,4 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatreservationservice.processor;
 
 import org.springframework.jms.core.MessagePostProcessor;
 
@@ -11,5 +11,4 @@ public class ReplyToProcessor implements MessagePostProcessor {
         message.setStringProperty("requiresReply", "no");
         return message;
     }
-
 }

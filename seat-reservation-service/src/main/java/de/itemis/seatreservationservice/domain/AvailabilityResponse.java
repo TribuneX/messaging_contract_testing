@@ -11,5 +11,6 @@ public class AvailabilityResponse {
 
     private String trainId;
     private int availableSeats;
-
+    private String requestId;
+    private String serviceId;
 }

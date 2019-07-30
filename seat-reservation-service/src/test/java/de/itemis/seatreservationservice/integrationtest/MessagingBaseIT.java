@@ -1,5 +1,7 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatreservationservice.integrationtest;
 
+import de.itemis.seatreservationservice.service.ReservationProducer;
+import de.itemis.seatreservationservice.verifier.JmsMessageVerifier;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,11 +11,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureMessageVerifier
-public abstract class MessagingBase {
-    @Autowired JmsMessageVerifier messaging;
-    @Autowired SeatReservationProducer seatReservationProducer;
+public abstract class MessagingBaseIT {
+
+    @Autowired
+    JmsMessageVerifier messaging;
+    @Autowired
+    ReservationProducer reservationProducer;
 
     public void testSend() {
-        seatReservationProducer.send("12");
+        reservationProducer.send("12");
     }
 }

@@ -35,7 +35,7 @@ public class JsonConverter implements MessageConverter {
 
         try {
             payload = mapper.writeValueAsString(object);
-            LOGGER.info("outbound json='{}'", payload);
+            LOGGER.debug("outbound json='{}'", payload);
         } catch (JsonProcessingException e) {
             LOGGER.error("error converting form response", e);
         }
@@ -50,9 +50,9 @@ public class JsonConverter implements MessageConverter {
     public Object fromMessage(Message message) throws JMSException {
         TextMessage textMessage = (TextMessage) message;
         String payload = textMessage.getText();
-        LOGGER.info("inbound json='{}'", payload);
+        LOGGER.debug("inbound json='{}'", payload);
 
-        if (payload.contains("availableSeats")){
+        if (payload.contains("availableSeats")) {
             AvailabilityResponse response = null;
             try {
                 response = mapper.readValue(payload, AvailabilityResponse.class);

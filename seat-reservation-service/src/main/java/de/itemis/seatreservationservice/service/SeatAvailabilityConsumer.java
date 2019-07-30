@@ -1,4 +1,4 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatreservationservice.service;
 
 import de.itemis.seatreservationservice.domain.AvailabilityResponse;
 import org.springframework.jms.annotation.JmsListener;
@@ -20,11 +20,10 @@ public class SeatAvailabilityConsumer {
         this.countDownLatch = countDownLatch;
     }
 
-
     @JmsListener(destination = "seatAvailability")
     public void receiveMessage(AvailabilityResponse response) {
         printerService.printResult(response);
-        if(countDownLatch != null) {
+        if (countDownLatch != null) {
             countDownLatch.countDown();
         }
     }

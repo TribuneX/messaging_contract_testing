@@ -1,7 +1,8 @@
-package de.itemis.seatreservationservice;
+package de.itemis.seatreservationservice.integrationtest;
 
 import de.itemis.seatreservationservice.domain.AvailabilityResponse;
-import org.junit.Ignore;
+import de.itemis.seatreservationservice.service.PrinterService;
+import de.itemis.seatreservationservice.service.SeatAvailabilityConsumer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ConsumerIntegrationTest {
+public class ConsumerIT {
 
     private static String trainId = "12";
 
@@ -27,7 +28,7 @@ public class ConsumerIntegrationTest {
     private JmsTemplate jmsTemplate;
 
     @Autowired
-    SeatAvailabilityConsumer consumer;
+    private SeatAvailabilityConsumer consumer;
 
     @MockBean
     private PrinterService service;
@@ -36,7 +37,9 @@ public class ConsumerIntegrationTest {
     public void shouldParseAvailabilityResponse() throws InterruptedException {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         consumer.setTestCountDownLatch(countDownLatch);
+
         AvailabilityResponse response = sendTestAvailabilityResponse();
+
         countDownLatch.await(5, TimeUnit.SECONDS);
         verify(service, times(1)).printResult(eq(response));
     }
