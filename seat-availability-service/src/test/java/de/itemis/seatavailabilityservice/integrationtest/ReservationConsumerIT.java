@@ -1,4 +1,4 @@
-package de.itemis.seatavailabilityservice.integrationtesting;
+package de.itemis.seatavailabilityservice.integrationtest;
 
 import de.itemis.seatavailabilityservice.service.AvailabilityProducer;
 import de.itemis.seatavailabilityservice.service.ReservationConsumer;

@@ -1,4 +1,4 @@
-package de.itemis.seatavailabilityservice.integrationtesting;
+package de.itemis.seatavailabilityservice.integrationtest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
