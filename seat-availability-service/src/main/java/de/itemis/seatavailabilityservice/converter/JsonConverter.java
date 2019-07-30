@@ -1,19 +1,18 @@
 package de.itemis.seatavailabilityservice.converter;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import java.io.IOException;
 
 @Component
@@ -36,7 +35,7 @@ public class JsonConverter implements MessageConverter {
 
         try {
             payload = mapper.writeValueAsString(object);
-            LOGGER.info("outbound json='{}'", payload);
+            LOGGER.debug("outbound json='{}'", payload);
         } catch (JsonProcessingException e) {
             LOGGER.error("error converting form response", e);
         }
@@ -51,9 +50,9 @@ public class JsonConverter implements MessageConverter {
     public Object fromMessage(Message message) throws JMSException {
         TextMessage textMessage = (TextMessage) message;
         String payload = textMessage.getText();
-        LOGGER.info("inbound json='{}'", payload);
+        LOGGER.debug("inbound json='{}'", payload);
 
-        if (payload.contains("availableSeats")){
+        if (payload.contains("availableSeats")) {
             AvailabilityResponse response = null;
             try {
                 response = mapper.readValue(payload, AvailabilityResponse.class);

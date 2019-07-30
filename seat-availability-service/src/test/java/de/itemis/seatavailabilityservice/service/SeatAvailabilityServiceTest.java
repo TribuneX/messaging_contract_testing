@@ -1,4 +1,4 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.service;
 
 import org.junit.Test;
 

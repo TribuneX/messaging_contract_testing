@@ -1,7 +1,8 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.verifier;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
+import de.itemis.seatavailabilityservice.processor.ReplyToProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
 import org.springframework.context.annotation.Primary;
@@ -52,8 +53,6 @@ public class JmsMessageVerifier implements MessageVerifier {
         }
         jmsTemplate.convertAndSend(destination, request, new ReplyToProcessor());
     }
-
-
 
     private Object receiveMessage(String queueName) {
         Message message = jmsTemplate.receive(queueName);

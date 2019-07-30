@@ -1,5 +1,8 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.integrationtesting;
 
+import de.itemis.seatavailabilityservice.service.AvailabilityProducer;
+import de.itemis.seatavailabilityservice.service.ReservationConsumer;
+import de.itemis.seatavailabilityservice.service.SeatAvailabilityService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +22,9 @@ import static org.mockito.Mockito.verify;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureStubRunner(
-        stubsMode = StubRunnerProperties.StubsMode.LOCAL,
-        ids = "de.itemis:seat-reservation-service:+:stubs")
-public class ConsumerIntegrationTest {
+    stubsMode = StubRunnerProperties.StubsMode.LOCAL,
+    ids = "de.itemis:seat-reservation-service:+:stubs")
+public class ReservationConsumerIT {
 
     private static String trainId = "12";
 
@@ -29,13 +32,13 @@ public class ConsumerIntegrationTest {
     StubFinder stubFinder;
 
     @Autowired
-    SeatReservationConsumer consumer;
+    ReservationConsumer consumer;
 
     @MockBean
     private SeatAvailabilityService service;
 
     @MockBean
-    private SeatReservationResponseProducer producer;
+    private AvailabilityProducer producer;
 
     @Test
     public void shouldParseReservationRequest() throws InterruptedException {
@@ -47,5 +50,4 @@ public class ConsumerIntegrationTest {
         countDownLatch.await(5, TimeUnit.SECONDS);
         verify(service, times(1)).getFreeSeats(trainId);
     }
-
 }

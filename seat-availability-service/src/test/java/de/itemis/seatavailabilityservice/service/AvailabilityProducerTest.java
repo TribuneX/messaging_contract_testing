@@ -1,7 +1,6 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.service;
 
 import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SeatReservationResponseProducerTest {
+public class AvailabilityProducerTest {
 
     @Mock
     private JmsTemplate jmsTemplate;
@@ -24,12 +23,14 @@ public class SeatReservationResponseProducerTest {
     public void shouldSendMessageContainingTheAvailabilityResponse() {
         int availableSeats = 3;
         String trainId = "12";
-        SeatReservationResponseProducer producer = new SeatReservationResponseProducer(jmsTemplate);
-        AvailabilityResponse response = new AvailabilityResponse(trainId, availableSeats);
+        String requestId = "0815";
+        String serviceId = "serviceId";
+        AvailabilityProducer producer = new AvailabilityProducer(jmsTemplate);
+        producer.setServiceId(serviceId);
+        AvailabilityResponse response = new AvailabilityResponse(trainId, availableSeats, requestId, serviceId);
 
-        producer.send(trainId, availableSeats);
+        producer.send(trainId, availableSeats, requestId);
 
         verify(jmsTemplate, times(1)).convertAndSend(eq("seatAvailability"), eq(response), any(MessagePostProcessor.class));
     }
-
 }

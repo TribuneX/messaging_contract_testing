@@ -1,6 +1,5 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -8,19 +7,19 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CountDownLatch;
 
 @Component
-public class SeatReservationConsumer {
+public class ReservationConsumer {
 
     private SeatAvailabilityService availabilityService;
     private CountDownLatch testCountDownLatch;
 
-    private SeatReservationResponseProducer producer;
+    private AvailabilityProducer producer;
 
-    public SeatReservationConsumer(SeatAvailabilityService availabilityService, SeatReservationResponseProducer producer) {
+    public ReservationConsumer(SeatAvailabilityService availabilityService, AvailabilityProducer producer) {
         this.availabilityService = availabilityService;
         this.producer = producer;
     }
 
-    public void setTestCountDownLatch(CountDownLatch testCountDownLatch){
+    public void setTestCountDownLatch(CountDownLatch testCountDownLatch) {
         this.testCountDownLatch = testCountDownLatch;
     }
 
@@ -29,11 +28,11 @@ public class SeatReservationConsumer {
         String trainId = request.getTrainId();
         triggerCountdownLatch();
         int freeSeats = availabilityService.getFreeSeats(trainId);
-        producer.send(trainId, freeSeats);
+        producer.send(trainId, freeSeats, request.getRequestId());
     }
 
     private void triggerCountdownLatch() {
-        if(testCountDownLatch != null) {
+        if (testCountDownLatch != null) {
             testCountDownLatch.countDown();
         }
     }

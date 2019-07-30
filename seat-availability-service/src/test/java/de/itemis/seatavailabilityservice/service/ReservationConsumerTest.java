@@ -1,9 +1,7 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -15,23 +13,23 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConsumerTest {
+public class ReservationConsumerTest {
 
     @Mock
     private SeatAvailabilityService seatAvailabilityService;
 
     @Mock
-    private SeatReservationResponseProducer producer;
+    private AvailabilityProducer producer;
 
     @Test
     public void shouldCallSeatAvailabilityCheckerOnRecievedRequest() throws IOException {
         String trainId = "12";
         ReservationRequest reservationRequest = createReservationRequest(trainId);
-        SeatReservationConsumer consumer = new SeatReservationConsumer(seatAvailabilityService, producer);
+        ReservationConsumer consumer = new ReservationConsumer(seatAvailabilityService, producer);
 
         consumer.receiveMessage(reservationRequest);
 
-        verify(seatAvailabilityService,times(1)).getFreeSeats(trainId);
+        verify(seatAvailabilityService, times(1)).getFreeSeats(trainId);
     }
 
     private ReservationRequest createReservationRequest(String trainId) throws JsonProcessingException {

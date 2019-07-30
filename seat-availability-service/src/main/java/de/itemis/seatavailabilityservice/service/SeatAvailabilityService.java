@@ -1,9 +1,10 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.service;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class SeatAvailabilityService {
+
     public int getFreeSeats(String traindId) {
         return 3;
     }

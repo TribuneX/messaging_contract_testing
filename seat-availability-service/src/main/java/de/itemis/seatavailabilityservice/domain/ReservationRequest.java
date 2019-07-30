@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class ReservationRequest {
 
     private String trainId;
-    private String id;
+    private String requestId;
 }

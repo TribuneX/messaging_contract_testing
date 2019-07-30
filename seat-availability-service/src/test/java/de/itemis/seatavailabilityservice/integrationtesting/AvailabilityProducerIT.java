@@ -1,7 +1,8 @@
-package de.itemis.seatavailabilityservice;
+package de.itemis.seatavailabilityservice.integrationtesting;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
+import de.itemis.seatavailabilityservice.service.AvailabilityProducer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ResponseProducerIntegrationTest {
+public class AvailabilityProducerIT {
 
     @Autowired
-    private SeatReservationResponseProducer producer;
+    private AvailabilityProducer producer;
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -33,7 +34,8 @@ public class ResponseProducerIntegrationTest {
     public void shouldSendMessageWithTrainId() throws JMSException, IOException {
         String trainId = "12";
         int availableSeats = 3;
-        producer.send(trainId, availableSeats);
+        String requestId = "0815";
+        producer.send(trainId, availableSeats, requestId);
 
         jmsTemplate.setReceiveTimeout(1000);
         Message message = jmsTemplate.receive("seatAvailability");
