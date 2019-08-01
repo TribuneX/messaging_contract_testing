@@ -32,7 +32,7 @@ public class ReservationConsumerIT {
     StubFinder stubFinder;
 
     @Autowired
-    ReservationConsumer consumer;
+    private ReservationConsumer consumer;
 
     @MockBean
     private SeatAvailabilityService service;

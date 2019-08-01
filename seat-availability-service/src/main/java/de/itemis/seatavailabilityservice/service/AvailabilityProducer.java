@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.jms.Destination;
 import java.util.Random;
 
 @Component
@@ -20,8 +21,8 @@ public class AvailabilityProducer {
         this.serviceId = String.valueOf(new Random().nextInt(9999));
     }
 
-    public void send(final String trainId, final int availableSeats, final String requestId) {
+    public void send(final String trainId, final int availableSeats, final String requestId, Destination queue) {
         AvailabilityResponse response = new AvailabilityResponse(trainId, availableSeats, requestId, serviceId);
-        jmsTemplate.convertAndSend("seatAvailability", response, new ReplyToProcessor());
+        jmsTemplate.convertAndSend(queue, response, new ReplyToProcessor(queue));
     }
 }

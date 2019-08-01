@@ -13,4 +13,5 @@ public class AvailabilityResponse {
     private int availableSeats;
     private String requestId;
     private String serviceId;
+    private double duration;
 }

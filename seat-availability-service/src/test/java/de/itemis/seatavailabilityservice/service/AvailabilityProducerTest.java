@@ -1,6 +1,7 @@
 package de.itemis.seatavailabilityservice.service;
 
 import de.itemis.seatavailabilityservice.domain.AvailabilityResponse;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,9 +29,10 @@ public class AvailabilityProducerTest {
         AvailabilityProducer producer = new AvailabilityProducer(jmsTemplate);
         producer.setServiceId(serviceId);
         AvailabilityResponse response = new AvailabilityResponse(trainId, availableSeats, requestId, serviceId);
+        ActiveMQQueue queue = new ActiveMQQueue("testQueue");
 
-        producer.send(trainId, availableSeats, requestId);
+        producer.send(trainId, availableSeats, requestId, queue);
 
-        verify(jmsTemplate, times(1)).convertAndSend(eq("seatAvailability"), eq(response), any(MessagePostProcessor.class));
+        verify(jmsTemplate, times(1)).convertAndSend(eq(queue), eq(response), any(MessagePostProcessor.class));
     }
 }

@@ -3,6 +3,7 @@ package de.itemis.seatavailabilityservice.verifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.itemis.seatavailabilityservice.domain.ReservationRequest;
 import de.itemis.seatavailabilityservice.processor.ReplyToProcessor;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.contract.verifier.messaging.MessageVerifier;
 import org.springframework.context.annotation.Primary;
@@ -29,7 +30,7 @@ public class JmsMessageVerifier implements MessageVerifier {
 
     @Override
     public void send(Object message, String destination) {
-        jmsTemplate.convertAndSend(destination, message, new ReplyToProcessor());
+        jmsTemplate.convertAndSend(destination, message, getProcessor());
     }
 
     @Override
@@ -51,7 +52,11 @@ public class JmsMessageVerifier implements MessageVerifier {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        jmsTemplate.convertAndSend(destination, request, new ReplyToProcessor());
+        jmsTemplate.convertAndSend(destination, request, getProcessor());
+    }
+
+    private ReplyToProcessor getProcessor() {
+        return new ReplyToProcessor(new ActiveMQQueue());
     }
 
     private Object receiveMessage(String queueName) {
